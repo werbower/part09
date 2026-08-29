@@ -8,8 +8,10 @@
     "dev": "tsx watch src/main.ts",
     "calculateBmi": "tsx src/bmiCalculator.ts",
     "calculateExercises": "tsx src/exerciseCalculator.ts",
+    
     "lint": "eslint .",
-    "check": "tsc --noEmit",
+    "tscNoEmit": "tsc --noEmit",
+    "check": "pnpm tscNoEmit && pnpm lint",
     "build": "tsc -p tsconfig.prod.json"
   },
   "keywords": [],
