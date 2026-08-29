@@ -24,7 +24,7 @@ export const calculateBmi = (height: number, mass: number): BmiCategory|undefine
   return (result ? result[0] : undefined) as BmiCategory
 }
 
-if (process.argv[2]){
+if (process.argv[1]=== import.meta.filename){
   const args = process.argv.slice(2)
   const [heightStr, massStr] = args
   console.log(calculateBmi(+heightStr, +massStr))

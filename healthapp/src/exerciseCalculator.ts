@@ -31,7 +31,7 @@ export const calculateExercises = (trainingData: number[], target: number): ICal
 
 }
 
-if (process.argv[2]){
+if (process.argv[1]=== import.meta.filename){
   const args = process.argv.slice(2)
   const [targetStr, ...trainingDataStr] = args
   console.log(calculateExercises(trainingDataStr.map(x=> +x), +targetStr))

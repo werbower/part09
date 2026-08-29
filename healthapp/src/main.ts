@@ -1,10 +1,11 @@
 import express from 'express'
-import { helloRouter } from './controllers/hello.controller.js'
+import { firstRouter } from './controllers/first.controller.js'
 
 console.log('hello world')
 
 const app = express()
-app.use('/hello', helloRouter)
+app.use(express.json())
+app.use('/', firstRouter)
 
 const port = 3000
 app.listen(port, ()=> {
