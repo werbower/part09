@@ -1,3 +1,3 @@
-import { calculateBmi } from "./bmiCalculator.js";
+console.log('hello world')
 
-console.log(calculateBmi(180, 74))
+
