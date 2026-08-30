@@ -1,12 +1,16 @@
 
 import request from 'supertest'
-import {  describe, expect, it, vi } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import * as exerciseModule from '../exerciseCalculator.js'
 import type { TExercise } from './first.controller.js'
 import { app } from '../main.js'
 
 
 describe('post /exercises ', async() => {
+  afterEach(async ()=> {
+    vi.resetAllMocks()
+  })
+
   it('should call calculateExercises', async()=> {
     const ceSpy = vi.spyOn(exerciseModule, 'calculateExercises')
       .mockReturnValue({success: true} as exerciseModule.ICalculatorResult)
@@ -22,10 +26,7 @@ describe('post /exercises ', async() => {
   })
 
   it('should calculateExercises correct', async()=> {
-    const testData = {
-      "daily_exercises": [1, 0, 2, 0, 3, 0, 2.5],
-      "target": 2.5
-    } as TExercise
+    const testData = {"daily_exercises": [1, 0, 2, 0, 3, 0, 2.5], "target": 2.5} as TExercise
     
     const result = await request(app).post('/exercises').send(testData)
     const resultBody = result.body as exerciseModule.ICalculatorResult

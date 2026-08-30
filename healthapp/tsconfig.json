@@ -29,6 +29,7 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
   },
-  "include": ["src"],
+  "include": ["src", 
+  "vitest.global.ts"],
   "exclude": ["node_moudles", "dist"]
 }

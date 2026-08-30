@@ -64,7 +64,7 @@ test.describe('Health App API', () => {
     });
   });
 
-  test.describe('POST /exercises', () => {
+  test.describe('POST /exercises', async () => {
     test('should calculate exercise statistics correctly', async ({ request }) => {
       const response = await request.post('/exercises', {
         data: {

@@ -2,7 +2,7 @@ name: Health app E2E Tests
 
 on:
   push:
-    branches: [ xmain, xmaster ]
+    branches: [ main, master ]
 
 jobs:
   test:
@@ -16,33 +16,44 @@ jobs:
       uses: actions/setup-node@v5
       with:
         node-version: '24'
+
+    - name: Install pnpm
+      uses: pnpm/action-setup@v6
+      with:
+        version: 11
     
     - name: Install healthapp dependencies
       working-directory: ./healthapp
-      run: npm install
+      run: |
+        pnpm install || true
+        pnpm approve-builds --all
+        pnpm install
     
     - name: Lint healthapp
       working-directory: ./healthapp
-      run: npm run lint
+      run: pnpm run lint
     
     - name: Start healthapp server
       working-directory: ./healthapp
       run: |
-        npm start &
+        pnpm dev &
         echo $! > server.pid
         sleep 3
     
     - name: Install test dependencies
       working-directory: ./healthapp-tests
-      run: npm install
+      run: |
+        pnpm install || true
+        pnpm approve-builds --all
+        pnpm install
     
     - name: Install Playwright browsers
       working-directory: ./healthapp-tests
-      run: npx playwright install --with-deps chromium
+      run: pnpx playwright install --with-deps chromium
     
     - name: Run e2e tests
       working-directory: ./healthapp-tests
-      run: npm test
+      run: pnpm test
     
     - name: Upload test report
       uses: actions/upload-artifact@v5

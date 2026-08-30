@@ -28,6 +28,7 @@ export default defineConfig({
         "ignoreRestSiblings": true
       }],
     '@typescript-eslint/consistent-indexed-object-style': 'off',
+    "@typescript-eslint/no-explicit-any": "off",
     '@stylistic/indent': ['error', 2],
     '@stylistic/semi': ['error', 'never']
   }
