@@ -1,11 +1,11 @@
 
 type TRating = 1|2|3
 const ratingDescriptions = [
-  'could be better', 'not too bad', 'very well'
+  'bad', 'not too bad but could be better', 'good'
 ]
 type TRatingDescription = typeof ratingDescriptions[number]
 
-interface ICalculatorResult {
+export interface ICalculatorResult {
   periodLength: number
   trainingDays: number
   success: boolean
