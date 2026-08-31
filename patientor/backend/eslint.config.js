@@ -13,6 +13,8 @@ export default defineConfig({
     tseslint.configs.stylistic
   ],
   rules: {
-    '@stylistic/indent': ['error', 2]
+    '@typescript-eslint/consistent-type-definitions': 'off',
+    '@stylistic/indent': ['error', 2],
+    '@stylistic/semi': ['error', 'never']
   }
 })
