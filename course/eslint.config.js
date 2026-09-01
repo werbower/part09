@@ -6,6 +6,7 @@ import tseslint from 'typescript-eslint'
 import { defineConfig, globalIgnores } from 'eslint/config'
 import stylistic from '@stylistic/eslint-plugin'
 
+
 export default defineConfig([
   globalIgnores(['dist']),
   {
@@ -24,7 +25,10 @@ export default defineConfig([
     },
     rules: {
       '@stylistic/semi': ['error', 'never'],
-      '@stylistic/indent': ['error', 2]
+      '@stylistic/indent': ['error', 2],
+      "@stylistic/member-delimiter-style": ['error', {
+        'multiline': {'delimiter': 'none'}
+      }]
     }
   },
 ])

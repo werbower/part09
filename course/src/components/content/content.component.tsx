@@ -1,11 +1,12 @@
-import type { TCoursePart } from "../../App"
+import type { CoursePart } from "../../App"
+import { Part } from "../part/part.component"
 
-interface ContentProps {courseParts: TCoursePart[]}
+interface ContentProps {courseParts: CoursePart[]}
 
 export const Content= ({courseParts}: ContentProps)=> {
   return (<>
-    {courseParts.map(x=> {
-      return (<p key={x.name}>{x.name} {x.exerciseCount}</p>)
+    {courseParts.map(part=> {
+      return (<p key={part.name}><Part {...{part}}/></p>)
     })}
   </>)
 }
