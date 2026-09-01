@@ -13,6 +13,7 @@ export default defineConfig({
     tseslint.configs.stylistic
   ],
   rules: {
+    "@typescript-eslint/consistent-indexed-object-style": "off",
     '@typescript-eslint/consistent-type-definitions': 'off',
     '@stylistic/indent': ['error', 2],
     '@stylistic/semi': ['error', 'never']

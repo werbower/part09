@@ -1,6 +1,7 @@
-import express, {type Request, type Response} from 'express'
+import express, {type NextFunction, type Request, type Response} from 'express'
 import { diagnoses } from '../data/diagnoses.js'
-import { patients, type Patient } from '../data/patients.js'
+import { createPatientValidation, patients, type TPatienCreate, type Patient, createPatient } from '../data/patients.js'
+import * as z from 'zod'
 
 
 export const apiRouter = express.Router()
@@ -20,3 +21,26 @@ apiRouter.get('/patients', (_req: Request, res: Response)=> {
   const result = patients.map(x => mapPatient(x))
   res.json(result)
 })
+
+apiRouter.post('/patients', (req: Request, res: Response)=> {
+  const dataPatient = createPatientValidation.parse(req.body) as TPatienCreate
+  const newPatient = createPatient(dataPatient)
+  const result = mapPatient(newPatient)
+
+  res.json(result)
+})
+
+const errHandler = (err: Error, _req: Request, res: Response, next: NextFunction)=> {
+  if (res.headersSent) return next(err)
+
+  if (err instanceof z.ZodError) {
+    res.status(400)
+    res.json(err.issues)
+    return
+  }
+  res.status(500)
+  res.json({err: err.message || err})
+}
+
+apiRouter.use(errHandler)
+

@@ -1,8 +1,32 @@
+import z from 'zod'
+import {v1 as uuid} from 'uuid'
+
+const genderValues = ['male', 'female', 'other']
 
 export type Patient = {
-  id: string, name: string, dateOfBirth: string, gender: string, occupation: string, ssn: string
+  id: string, name: string, dateOfBirth: string, gender: typeof genderValues[number],
+  occupation: string, ssn?: string|undefined
 }
-export const patients = [
+export type TPatienCreate = Omit<Patient, 'id'>
+type TPatientValidation = {[key in keyof TPatienCreate]: unknown}
+
+
+export const createPatientValidation = z.object({
+  name: z.string().trim().min(1, {message: `name required`}),
+  dateOfBirth: z.iso.date(),
+  gender: z.enum(genderValues),
+  occupation: z.string().trim().min(1, {message: 'occupation required'}),
+  ssn: z.string().optional()
+} as TPatientValidation )
+
+
+export const createPatient = (x: TPatienCreate): Patient => {
+  const newPatient = {...x, id: uuid()}
+  patients.push(newPatient)
+  return newPatient
+}
+
+export const patients: Patient[] = [
   {
     "id": "d2773336-f723-11e9-8f0b-362b9e155667",
     "name": "John McClane",
