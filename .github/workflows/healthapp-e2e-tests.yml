@@ -49,7 +49,7 @@ jobs:
     
     - name: Install Playwright browsers
       working-directory: ./healthapp-tests
-      run: pnpx playwright install --with-deps chromium
+      run: pnx playwright install --with-deps chromium
     
     - name: Run e2e tests
       working-directory: ./healthapp-tests

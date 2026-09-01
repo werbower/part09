@@ -2,7 +2,7 @@ name: Patientor API Tests
 
 on:
   push:
-    branches: [ xmain, xmaster ]
+    branches: [ main, master ]
 
 jobs:
   test:
@@ -17,24 +17,35 @@ jobs:
       with:
         node-version: '24'
 
+    - name: Install pnpm
+      uses: pnpm/action-setup@v6
+      with:
+        version: 11
+
     - name: Install patientor backend dependencies
       working-directory: ./patientor/backend
-      run: npm install --legacy-peer-deps
+      run: |
+        pnpm install --strict-peer-dependencies=false || true
+        pnpm approve-builds --all
+        pnpm install
 
     - name: Lint patientor backend
       working-directory: ./patientor/backend
-      run: npm run lint
+      run: pnpm run lint
 
     - name: Start patientor backend server
       working-directory: ./patientor/backend
       run: |
-        npm start &
+        pnpm dev &
         echo $! > server.pid
         sleep 3
 
     - name: Install test dependencies
       working-directory: ./patientor-api-tests
-      run: npm install
+      run: |
+        pnpm install || true
+        pnpm approve-builds --all
+        pnpm install
 
     - name: Install Playwright browsers
       working-directory: ./patientor-api-tests
@@ -42,7 +53,7 @@ jobs:
 
     - name: Run API tests
       working-directory: ./patientor-api-tests
-      run: npm test
+      run: pnpm test
 
     - name: Upload test report
       uses: actions/upload-artifact@v5

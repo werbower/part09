@@ -25,9 +25,8 @@ apiRouter.get('/patients', (_req: Request, res: Response)=> {
 apiRouter.post('/patients', (req: Request, res: Response)=> {
   const dataPatient = createPatientValidation.parse(req.body) as TPatienCreate
   const newPatient = createPatient(dataPatient)
-  const result = mapPatient(newPatient)
-
-  res.json(result)
+  
+  res.json(newPatient)
 })
 
 const errHandler = (err: Error, _req: Request, res: Response, next: NextFunction)=> {

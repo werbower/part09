@@ -1,5 +1,5 @@
 {
-  "extends": "@tsconfig/node24/tsnode.json",
+  "extends": "@tsconfig/node24/tsconfig.json",
   "compilerOptions": {
     // File Layout
     "rootDir": "./src",
