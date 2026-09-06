@@ -1,4 +1,4 @@
-import type { DiaryEntry } from "../src/types.ts";
+import type { DiaryEntry } from "../src/types.ts"
 
 const diaryEntries: DiaryEntry[] = [
   {
@@ -29,6 +29,6 @@ const diaryEntries: DiaryEntry[] = [
     "visibility": "good",
     "comment": "I almost failed the landing but I survived"
   }
-];
+]
 
-export default diaryEntries;
+export default diaryEntries
