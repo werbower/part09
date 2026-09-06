@@ -1,3 +1,10 @@
 .nav-panel {
     margin-bottom: 1em;
+    .navlink {
+        display: inline-block;
+        +.navlink {
+            margin-left: 1em;
+        }
+    }
+
 }

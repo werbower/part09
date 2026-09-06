@@ -1,0 +1,10 @@
+.form {
+    input, select {
+        min-width: 200px;
+    }
+    .row {
+        +.row {
+            margin-top: 1em;
+        }
+    }
+}
