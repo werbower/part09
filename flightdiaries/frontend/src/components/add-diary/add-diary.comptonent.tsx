@@ -2,8 +2,8 @@ import type { SubmitEvent } from "react"
 import { apiService } from "../../services/axios.service"
 import { useNavigate } from "react-router"
 import styles from './add-diary.module.css'
-import axios, { AxiosError } from "axios"
 import { showNoti } from "../../services/app.service"
+import { AxiosError } from "axios"
 
 const weatherVals = ['sunny','rainy','cloudy','stormy','windy']
 const visibilityVals = ['great','good','ok','poor']
@@ -39,9 +39,13 @@ export const AddDiary = ()=> {
     const weather = form.weather.value as Weather
     const visibility = form.visibility.value as Visibility
     const comment = form.comment.value
+
+    const newDiary = {date, weather, visibility, comment}
+    console.log('date value', newDiary)
+    
     
     try {
-      await apiService.addDiary({date, weather, visibility, comment})
+      await apiService.addDiary(newDiary)
       navigate('/')
 
     } catch (err) {
@@ -65,24 +69,25 @@ export const AddDiary = ()=> {
     <form onSubmit={(e)=> handleSubmit(e)} className={styles.form}>
       <div className={styles.row}>
         <label htmlFor="ad_date">date</label>
-        <input type="text" id="ad_date" name="date" />
+        <input type="date" id="ad_date" name="date" />
       </div>
       <div className={styles.row}>
-        <label htmlFor="ad_weather">weather</label>
-        <select id="ad_weather" name="weather">
-          <option key={undefined} value='' disabled selected hidden >Select</option>
-          {weatherVals.map(item=> {
-            return (<option key={item} value={item}>{item}</option>)
-          })}
-        </select>
+        <span >weather: </span>
+        {weatherVals.map(item => {
+          return (<span key={item} >
+            <label htmlFor={`ad-weather-${item}`}>{item}</label>
+            <input type="radio" id={`ad-weather-${item}`} name="weather" value={item}/>
+          </span>)
+        })}        
       </div>
       <div className={styles.row}>
-        <label htmlFor="ad_visibility">visibility</label>
-        <select id="ad_visibility" name="visibility">
-          {visibilityVals.map(item=> {
-            return (<option key={item} value={item}>{item}</option>)
-          })}
-        </select>
+        <span >visibility:</span>
+        {visibilityVals.map(item => {
+          return (<span key={item}>
+            <label htmlFor={`ad_visibility-${item}`}>{item}</label>
+            <input type="radio" id={`ad_visibility-${item}`} name="visibility" value={item}/>
+          </span>)
+        })}
       </div>
       <div className={styles.row}>
         <label htmlFor="ad_comment">comment</label>
