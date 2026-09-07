@@ -3,8 +3,11 @@ import { NavLink, Route, Routes } from 'react-router'
 import styles from './App.module.css'
 import { Diaries } from './components/diaries/diaries.component'
 import { AddDiary } from './components/add-diary/add-diary.comptonent'
+import { useAppStore } from './services/app.service'
+import { Noti } from './components/noti/noti.component'
 
 function App() {
+  const message = useAppStore(x=> x.notiMessage)
   
 
   return (
@@ -17,6 +20,8 @@ function App() {
           Add diary
         </NavLink>
       </nav>
+      
+      {!!message && <Noti {...{message }}/>}
       
       <Routes>
         <Route index element={<Diaries />} />

@@ -2,6 +2,8 @@ import type { SubmitEvent } from "react"
 import { apiService } from "../../services/axios.service"
 import { useNavigate } from "react-router"
 import styles from './add-diary.module.css'
+import axios, { AxiosError } from "axios"
+import { showNoti } from "../../services/app.service"
 
 const weatherVals = ['sunny','rainy','cloudy','stormy','windy']
 const visibilityVals = ['great','good','ok','poor']
@@ -38,8 +40,24 @@ export const AddDiary = ()=> {
     const visibility = form.visibility.value as Visibility
     const comment = form.comment.value
     
-    await apiService.addDiary({date, weather, visibility, comment})
-    navigate('/')
+    try {
+      await apiService.addDiary({date, weather, visibility, comment})
+      navigate('/')
+
+    } catch (err) {
+      
+      if (!!err && err instanceof AxiosError) {
+        const errorMessages: string[] = []
+        const errArray = err.response?.data?.error
+        if (Array.isArray(errArray)){
+          errArray.forEach((item: {code: string, path?: string[], message?: string})=> {
+            errorMessages.push( `${item.path?.[0]} ${item.code} ${item.message}`)
+          })
+        }
+        showNoti(errorMessages)
+      }
+    }
+    
 
   }
 
@@ -52,6 +70,7 @@ export const AddDiary = ()=> {
       <div className={styles.row}>
         <label htmlFor="ad_weather">weather</label>
         <select id="ad_weather" name="weather">
+          <option key={undefined} value='' disabled selected hidden >Select</option>
           {weatherVals.map(item=> {
             return (<option key={item} value={item}>{item}</option>)
           })}
