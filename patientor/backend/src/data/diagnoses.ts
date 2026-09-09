@@ -1,12 +1,13 @@
 
 
-export type Diagnose = {code: string, name: string, latin?: string}
-export const diagnoses: Diagnose[] = [
+export type Diagnose = {code: string , name: string, latin?: string}
+
+export const diagnoses  = [
   {
     "code": "M24.2",
     "name": "Disorder of ligament",
     "latin": "Morbositas ligamenti"
-  },
+  } ,
   {
     "code": "M51.2",
     "name": "Other specified intervertebral disc displacement",
@@ -78,6 +79,6 @@ export const diagnoses: Diagnose[] = [
     "code": "H35.29",
     "name": "Other proliferative retinopathy",
     "latin": "Alia retinopathia proliferativa"
-  }
-]
+  } 
+] as const
 

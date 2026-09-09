@@ -14,11 +14,25 @@ apiRouter.get('/diagnoses', (_req: Request, res: Response)=> {
 const mapPatient = (x: Partial<Patient>)=> {
   const result = {...x}
   delete result.ssn
+  delete result.entries
   return result
 }
 
 apiRouter.get('/patients', (_req: Request, res: Response)=> {
   const result = patients.map(x => mapPatient(x))
+  res.json(result)
+})
+
+apiRouter.get('/patients/:id', (req: Request, res: Response)=> {
+  const {id} = req.params
+  const result = patients.find(x=> x.id === id)
+
+  if (!result){
+    res.status(404)
+    res.json({message: 'not found patient'})
+    return
+  }
+    
   res.json(result)
 })
 

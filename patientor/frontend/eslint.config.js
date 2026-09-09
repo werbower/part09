@@ -23,7 +23,10 @@ export default tseslint.config(
         'warn',
         { allowConstantExport: true },
       ],
-      'semi': ['error'],
+      'semi': ['error', 'never'],
+      'no-useless-escape':'off',
+      "react-hooks/exhaustive-deps": 'off',
+
       '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/explicit-module-boundary-types': 'off',
       '@typescript-eslint/restrict-template-expressions': 'off',
