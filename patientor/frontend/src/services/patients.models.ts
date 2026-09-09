@@ -6,7 +6,7 @@ interface BaseEntry {
   description: string;
   date: string;
   specialist: string;
-  diagnosisCodes?: string[];
+  diagnosisCodes?: string[]|Diagnose[];
 }
 
 const HealthCheckRating = {

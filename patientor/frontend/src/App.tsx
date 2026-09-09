@@ -9,6 +9,7 @@ import { Patient } from "./types"
 import patientService from "./services/patients"
 import PatientListPage from "./components/PatientListPage"
 import { PatientDetails } from "./components/patient-details/patient-details.component"
+import { useAppStore } from "./services/app.service"
 
 const App = () => {
   const [patients, setPatients] = useState<Patient[]>([])
@@ -16,11 +17,15 @@ const App = () => {
   useEffect(() => {
     void axios.get<void>(`${apiBaseUrl}/ping`)
 
-    const fetchPatientList = async () => {
+    const fetchData = async () => {
       const patients = await patientService.getAll()
       setPatients(patients)
+
+      const diagnoses = await patientService.getDiagnoses()
+      useAppStore.getState().setDiagnoses(diagnoses)
     }
-    void fetchPatientList()
+    fetchData()
+    
   }, [])
   
   return (

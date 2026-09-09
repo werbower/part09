@@ -8,11 +8,26 @@ import MaleIcon from '@mui/icons-material/Male'
 import FemaleIcon from '@mui/icons-material/Female'
 import TransgenderIcon from '@mui/icons-material/Transgender'
 import { PatientEntry } from "../patient-entry/patient-entry.component"
+import { useAppStore } from "../../services/app.service"
+import { Diagnose } from "../../services/patients.models"
 
 
 
 export const PatientDetails = ()=> {
-    const [patient, setPatient] = useState<Patient|null>(null)
+    const [patientVal, setPatient] = useState<Patient|null>(null)
+    const diagnoses = useAppStore(x=> x.diagnoses)
+
+    const patient = {...patientVal}
+
+    if (patient.entries?.length && diagnoses?.length) {
+        patient.entries.forEach(entry => {
+            if (entry.diagnosisCodes?.length) {
+                entry.diagnosisCodes = ((entry.diagnosisCodes as string[]).map(code=> {
+                    return diagnoses.find(d=> d.code === code)
+                }) as Diagnose[]).filter(x=> !!x)
+            }
+        })
+    }
     
 
     const {id} = useParams()
