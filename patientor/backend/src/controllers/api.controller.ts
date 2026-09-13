@@ -1,6 +1,6 @@
 import express, {type NextFunction, type Request, type Response} from 'express'
 import { diagnoses } from '../data/diagnoses.js'
-import { createPatientValidation, patients, type TPatienCreate, type Patient, createPatient } from '../data/patients.js'
+import { createPatientValidation, patients, type TPatienCreate, type Patient, createPatient, entryCreateZod, type EntryCreate, createEntry } from '../data/patients.js'
 import * as z from 'zod'
 
 
@@ -41,6 +41,14 @@ apiRouter.post('/patients', (req: Request, res: Response)=> {
   const newPatient = createPatient(dataPatient)
   
   res.json(newPatient)
+})
+
+apiRouter.post('/patients/:id/entries', (req: Request, res: Response)=> {
+  const {id}= req.params
+  
+  const dataEntry: EntryCreate = entryCreateZod.parse(req.body)
+  const newEntry = createEntry(id as string, dataEntry)
+  res.json(newEntry)
 })
 
 const errHandler = (err: Error, _req: Request, res: Response, next: NextFunction)=> {

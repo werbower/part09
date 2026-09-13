@@ -1,4 +1,4 @@
-import { Entry } from "./services/patients.models";
+import { Entry } from "./services/patients.models"
 
 export interface Diagnosis {
   code: string;

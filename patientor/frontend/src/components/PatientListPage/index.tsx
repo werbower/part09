@@ -73,10 +73,10 @@ const PatientListPage = ({ patients, setPatients } : Props ) => {
           {Object.values(patients).map((patient: Patient) => (
             <TableRow key={patient.id}>
               <TableCell onClick={()=> handlePatientClick(patient)}
-              sx={{'&:hover': {
-                cursor: 'pointer'
-              }}}
-                >{patient.name}</TableCell>
+                sx={{'&:hover': {
+                  cursor: 'pointer'
+                }}}
+              >{patient.name}</TableCell>
               <TableCell>{patient.gender}</TableCell>
               <TableCell>{patient.occupation}</TableCell>
               <TableCell>

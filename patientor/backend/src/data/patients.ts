@@ -1,9 +1,14 @@
 import z from 'zod'
 import {v1 as uuid} from 'uuid'
-import type { diagnoses } from './diagnoses.js'
 
-const genderValues = ['male', 'female', 'other']
 
+const genderValues = ['male', 'female', 'other'] as const
+const HealthCheckRating = {
+  Healthy: 0,
+  LowRisk: 1,
+  HighRisk: 2,
+  CriticalRisk: 3,
+} as const
 
 
 export type Patient = {
@@ -23,26 +28,72 @@ export const createPatientValidation = z.object({
 } as TPatientValidation )
 
 
+const requiredString = (field: string)=> z.string().trim().min(1, {message: `${field} required`})
+type BaseEntryCreate = Omit<BaseEntry, 'id'>
+export const baseEntryCreateValidation = z.object({
+  description: requiredString('description'),
+  date: z.iso.date(),
+  specialist: requiredString('specialist'),
+  diagnosisCodes: z.optional(z.array(z.string()))
+}) satisfies z.ZodType<BaseEntryCreate>
+
+const ratings = Object.values(HealthCheckRating)
+
+export const healthCheckEntryCreateZod = baseEntryCreateValidation.extend({
+  type: z.literal("HealthCheck"),
+  healthCheckRating: z.literal(ratings)
+})
+
+export const hospitalEntryCreateZod = baseEntryCreateValidation.extend({
+  type: z.literal('Hospital'),
+  discharge: z.object({
+    date: z.iso.date(),
+    criteria: requiredString('criteria'),
+  })
+})
+
+export const occupationalHealthcareEntryCreateZod = baseEntryCreateValidation.extend({
+  type: z.literal('OccupationalHealthcare'),
+  employerName: requiredString('employerName'),
+  sickLeave: z.optional(z.object({
+    startDate: z.iso.date(),
+    endDate: z.iso.date()
+  }))
+})
+
+export const entryCreateZod = z.discriminatedUnion('type', 
+  [healthCheckEntryCreateZod, hospitalEntryCreateZod, occupationalHealthcareEntryCreateZod])
+
+
 export const createPatient = (x: TPatienCreate): Patient => {
   const newPatient = {...x, id: uuid()}
   patients.push(newPatient)
   return newPatient
 }
 
-interface BaseEntry {
-  id: string;
-  description: string;
-  date: string;
-  specialist: string;
-  diagnosisCodes?: string[];
+export const createEntry = (id: string, x: EntryCreate): Entry => {
+  const patient = patients.find(p=> p.id === id)
+  if (!patient)
+    throw new Error(`can't find patient with id=${id}`)
+
+  const newEntry = {...x, id: uuid()}
+  if (!Array.isArray(patient.entries))
+    patient.entries = []
+  patient.entries.push(newEntry)
+  return newEntry
 }
 
-const HealthCheckRating = {
-  Healthy: 0,
-  LowRisk: 1,
-  HighRisk: 2,
-  CriticalRisk: 3,
-} as const
+
+
+interface BaseEntry {
+  id: string
+  description: string
+  date: string
+  specialist: string
+  diagnosisCodes?: string[]
+}
+
+
 
 type HealthCheckRating = typeof HealthCheckRating[keyof typeof HealthCheckRating]
 
@@ -57,7 +108,6 @@ interface HospitalEntry extends BaseEntry {
     date: string
     criteria: string
   }
-
 }
 
 interface OccupationalHealthcareEntry extends BaseEntry {
@@ -72,6 +122,9 @@ export type Entry =
   | HospitalEntry
   | OccupationalHealthcareEntry
   | HealthCheckEntry
+
+type DistributiveOmit<T, K extends keyof T > = T extends any ? Omit<T, K> : never
+export type EntryCreate = DistributiveOmit<Entry, 'id'>
 
 
 export const patients: Patient[] = [

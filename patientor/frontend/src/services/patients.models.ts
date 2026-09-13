@@ -9,18 +9,24 @@ interface BaseEntry {
   diagnosisCodes?: string[]|Diagnose[];
 }
 
-const HealthCheckRating = {
+export const HealthCheckRating = {
   Healthy: 0,
   LowRisk: 1,
   HighRisk: 2,
   CriticalRisk: 3,
 } as const
 
-type HealthCheckRating = typeof HealthCheckRating[keyof typeof HealthCheckRating]
+export type THealthCheckRating = typeof HealthCheckRating[keyof typeof HealthCheckRating]
+
+
+export const entryTypes: Array<{type: EntryType, descr: string}> = [
+  {type: 'HealthCheck', descr: 'Health Check'},
+  {type: 'Hospital', descr: 'Hospital'},
+  {type: 'OccupationalHealthcare', descr: 'Occupational Healthcare'}] as const
 
 export interface HealthCheckEntry extends BaseEntry {
-  type: "HealthCheck";
-  healthCheckRating: HealthCheckRating;
+  type: "HealthCheck"
+  healthCheckRating: THealthCheckRating;
 }
 
 export interface HospitalEntry extends BaseEntry {
@@ -29,7 +35,6 @@ export interface HospitalEntry extends BaseEntry {
     date: string
     criteria: string
   }
-
 }
 
 export interface OccupationalHealthcareEntry extends BaseEntry {
@@ -40,7 +45,20 @@ export interface OccupationalHealthcareEntry extends BaseEntry {
     endDate: string
   }
 }
+
 export type Entry =
   | HospitalEntry
   | OccupationalHealthcareEntry
   | HealthCheckEntry
+
+export type EntryType = Entry['type']
+
+type DistributiveOmit<T, K extends keyof T> = T extends any? Omit<T, K>: never
+export type EntryCreate = DistributiveOmit<Entry, 'id'>
+
+
+
+
+  
+
+ 
