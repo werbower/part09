@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Box, Table, Button, TableHead, Typography, TableCell, TableRow, TableBody } from '@mui/material'
+import { Box, Table, Button, TableHead, Typography, TableCell, TableRow, TableBody, Link } from '@mui/material'
 import axios from 'axios'
 
 import { PatientFormValues, Patient } from "../../types"
@@ -8,7 +8,8 @@ import AddPatientModal from "../AddPatientModal"
 import HealthRatingBar from "../HealthRatingBar"
 
 import patientService from "../../services/patients"
-import { useNavigate } from "react-router-dom"
+
+
 
 interface Props {
   patients : Patient[]
@@ -16,7 +17,7 @@ interface Props {
 }
 
 const PatientListPage = ({ patients, setPatients } : Props ) => {
-  const navigate = useNavigate()
+  
 
   const [modalOpen, setModalOpen] = useState<boolean>(false)
   const [error, setError] = useState<string>()
@@ -48,10 +49,7 @@ const PatientListPage = ({ patients, setPatients } : Props ) => {
       }
     }
   }
-
-  const handlePatientClick = (patient: Patient)=> {
-    navigate(`/patients/${patient.id}`)
-  }
+  
 
   return (
     <div className="App">
@@ -72,11 +70,10 @@ const PatientListPage = ({ patients, setPatients } : Props ) => {
         <TableBody>
           {Object.values(patients).map((patient: Patient) => (
             <TableRow key={patient.id}>
-              <TableCell onClick={()=> handlePatientClick(patient)}
-                sx={{'&:hover': {
-                  cursor: 'pointer'
-                }}}
-              >{patient.name}</TableCell>
+              <TableCell>
+                <Link underline='none'
+                  href={`/patients/${patient.id}`}>{patient.name}</Link>
+              </TableCell>
               <TableCell>{patient.gender}</TableCell>
               <TableCell>{patient.occupation}</TableCell>
               <TableCell>

@@ -1,5 +1,5 @@
 import { List, ListItem, Typography } from "@mui/material"
-import { Entry, HealthCheckEntry, HospitalEntry, OccupationalHealthcareEntry } from "../../services/patients.models"
+import { BasicEntry, Entry, HealthCheckEntry, HospitalEntry, OccupationalHealthcareEntry } from "../../services/patients.models"
 import MedicalInformationIcon from '@mui/icons-material/MedicalInformation'
 import LocalHospitalIcon from '@mui/icons-material/LocalHospital'
 import MedicalServicesIcon from '@mui/icons-material/MedicalServices'
@@ -12,7 +12,9 @@ export const PatientEntry = ({entry}: PatientEntryProps)=> {
 
   const entryVal = entry.type === "HealthCheck"? (entry as HealthCheckEntry):
     entry.type === 'Hospital'? (entry as HospitalEntry):
-      entry.type === 'OccupationalHealthcare'? (entry as OccupationalHealthcareEntry): null as never
+      entry.type === 'OccupationalHealthcare'? (entry as OccupationalHealthcareEntry):
+        entry.type === ''? (entry as BasicEntry):
+          null as never
 
   if (!entry) return(<></>)
         
@@ -63,6 +65,16 @@ export const PatientEntry = ({entry}: PatientEntryProps)=> {
           <Typography >discharge </Typography>
           <Typography sx={{pl: '1em'}}>date: {entry.discharge.date}; criteria: {entry.discharge.criteria} </Typography>
         </>}
+        {diagnoses}
+      </>)
+      break
+    }
+    case '': {
+      return(<>
+        <Typography  variant="body1" sx={{display: 'flex', columnGap: '.3em', alignItems: 'center'}}
+        >{entryVal.date} {typeIcon}</Typography>
+        <Typography  sx={{ fontStyle: 'italic'}}>{entry.description}</Typography>
+        <Typography >diagnose by {entry.specialist}</Typography>
         {diagnoses}
       </>)
       break

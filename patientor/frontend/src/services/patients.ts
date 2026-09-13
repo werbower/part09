@@ -33,7 +33,9 @@ const createEntry = async (id: string, entry: EntryCreate)=> {
   } else {
     delete entry.diagnosisCodes
   }
-    
+
+  if (!entry.type) 
+    entry.type = ''
   
   const { data } = await axios.post<Entry>(
     `${apiBaseUrl}/patients/${id}/entries`,

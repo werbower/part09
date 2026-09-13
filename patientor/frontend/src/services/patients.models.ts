@@ -46,10 +46,15 @@ export interface OccupationalHealthcareEntry extends BaseEntry {
   }
 }
 
+export interface BasicEntry extends BaseEntry {
+  type: ''
+}
+
 export type Entry =
   | HospitalEntry
   | OccupationalHealthcareEntry
   | HealthCheckEntry
+  | BasicEntry
 
 export type EntryType = Entry['type']
 

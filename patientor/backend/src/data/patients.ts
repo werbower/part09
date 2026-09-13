@@ -61,8 +61,13 @@ export const occupationalHealthcareEntryCreateZod = baseEntryCreateValidation.ex
   }))
 })
 
+export const basicCreateZod = baseEntryCreateValidation.extend({
+  type: z.literal('')
+})
+
 export const entryCreateZod = z.discriminatedUnion('type', 
-  [healthCheckEntryCreateZod, hospitalEntryCreateZod, occupationalHealthcareEntryCreateZod])
+  [healthCheckEntryCreateZod, hospitalEntryCreateZod, occupationalHealthcareEntryCreateZod,
+    basicCreateZod])
 
 
 export const createPatient = (x: TPatienCreate): Patient => {
@@ -118,10 +123,18 @@ interface OccupationalHealthcareEntry extends BaseEntry {
     endDate: string
   }
 }
+
+interface BasicEntry extends BaseEntry {
+  type: ''
+}
+
+
+
 export type Entry =
   | HospitalEntry
   | OccupationalHealthcareEntry
   | HealthCheckEntry
+  | BasicEntry
 
 type DistributiveOmit<T, K extends keyof T > = T extends any ? Omit<T, K> : never
 export type EntryCreate = DistributiveOmit<Entry, 'id'>

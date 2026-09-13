@@ -2,7 +2,7 @@ name: Patientor E2E Tests
 
 on:
   push:
-    branches: [ xmain, xmaster ]
+    branches: [ main, master ]
 
 jobs:
   test:
@@ -16,41 +16,52 @@ jobs:
       uses: actions/setup-node@v5
       with:
         node-version: '24'
+      
+    - name: Install pnpm
+      uses: pnpm/action-setup@v6
+      with:
+        version: 11
 
     - name: Install patientor backend dependencies
       working-directory: ./patientor/backend
-      run: npm install --legacy-peer-deps
+      run: |
+        pnpm install --strict-peer-dependencies=false || true
+        pnpm approve-builds --all
+        pnpm install
 
     - name: Start patientor backend
       working-directory: ./patientor/backend
-      run: npm start &
+      run: pnpm start &
 
     - name: Install patientor frontend dependencies
       working-directory: ./patientor/frontend
-      run: npm install --legacy-peer-deps
+      run: |
+        pnpm install --strict-peer-dependencies=false || true
+        pnpm approve-builds --all
+        pnpm install
 
     - name: Build patientor frontend
       working-directory: ./patientor/frontend
-      run: npm run build
+      run: pnpm run build
 
     - name: Start patientor frontend preview
       working-directory: ./patientor/frontend
-      run: npx vite preview --port 5173 &
+      run: pnx vite preview --port 5173 &
 
     - name: Install e2e test dependencies
       working-directory: ./patientor-tests
-      run: npm install 
+      run: pnpm install 
 
     - name: Install Playwright browsers
       working-directory: ./patientor-tests
-      run: npx playwright install --with-deps chromium
+      run: pnx playwright install --with-deps chromium
 
     - name: Wait for servers to start
-      run: npx wait-on http://localhost:3001/api/ping http://localhost:5173 --timeout 60000
+      run: pnx wait-on http://localhost:3001/api/ping http://localhost:5173 --timeout 60000
 
     - name: Run E2E tests
       working-directory: ./patientor-tests
-      run: npm test
+      run: pnpm test
 
     - name: Upload test report
       uses: actions/upload-artifact@v5

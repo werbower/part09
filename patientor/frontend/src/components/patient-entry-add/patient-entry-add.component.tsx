@@ -4,7 +4,8 @@ import { Diagnose, EntryCreate, EntryType, entryTypes, HealthCheckRating } from 
 import {  SubmitEvent, useContext, useState } from "react"
 import { useAppStore } from "../../services/app.service"
 import patientService from "../../services/patients"
-import { DetailsContext } from "../patient-details/patient-details.component"
+import { DetailsContext } from "../patient-details/details-context"
+
 
 
 type TargetEvent = {target: {value: unknown}}
@@ -42,7 +43,8 @@ export const PatienEntryAdd = ()=> {
     const entryData = Object.fromEntries(fData.entries()) as any as EntryCreate
 
     await patientService.createEntry(patientId as string, entryData)
-    await fetchPatient()
+    if (fetchPatient)
+      await fetchPatient()
     navigate(`/patients/${patientId}`)
   }
 
@@ -209,7 +211,7 @@ export const PatienEntryAdd = ()=> {
 
       </Box>
       <Box sx={{mt: '1em', display: 'flex', columnGap: '1em'}}>
-        <Button variant="contained" type="submit" >Ok</Button>
+        <Button variant="contained" type="submit" >Add</Button>
         <Button variant="outlined" onClick={handleCancel}>Cancel</Button>
       </Box>
     </Box>)
